@@ -1,3 +1,4 @@
+BindGlobal("GAP_POLYHEDRAL_tmpdir",DirectoryTemporary());
 FilePOLY_SerialDualDesc:=Filename(DirectoriesPackagePrograms("gap_polyhedral"),"POLY_SerialDualDesc");
 FileCP_TestCopositivity:=Filename(DirectoriesPackagePrograms("gap_polyhedral"),"CP_TestCopositivity");
 FileCP_TestCompletePositivity:=Filename(DirectoriesPackagePrograms("gap_polyhedral"),"CP_TestCompletePositivity");
@@ -34,9 +35,9 @@ end;
 
 GenericExecutionFile:=function(f_write, input, TheProg)
     local FileInp, FileOut, FileErr;
-    FileInp:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.inp");
-    FileOut:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.out");
-    FileErr:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.err");
+    FileInp:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.inp");
+    FileOut:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.out");
+    FileErr:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.err");
     f_write(FileInp, input);
     #
     TheCommand:=Concatenation(TheProg, " ", FileInp, " GAP ", FileOut, " 2> ", FileErr);
@@ -51,10 +52,10 @@ end;
 
 GenericExecutionFileFile:=function(f_write1, input1, f_write2, input2, TheProg)
     local FileInp, FileOut, FileErr;
-    FileIn1:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.in1");
-    FileIn2:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.in2");
-    FileOut:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.out");
-    FileErr:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.err");
+    FileIn1:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.in1");
+    FileIn2:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.in2");
+    FileOut:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.out");
+    FileErr:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.err");
     f_write1(FileIn1, input1);
     f_write2(FileIn2, input2);
     #
@@ -71,9 +72,9 @@ end;
 
 GenericExecutionFileStrInput:=function(f_write, input, strInput, eProg)
     local FileInp, FileOut, FileErr;
-    FileInp:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.inp");
-    FileOut:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.out");
-    FileErr:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.err");
+    FileInp:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.inp");
+    FileOut:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.out");
+    FileErr:=Filename(GAP_POLYHEDRAL_tmpdir,"GenericExecSing.err");
     f_write(FileInp, input);
     #
     TheCommand:=Concatenation(eProg, " ", FileInp, " ", strInput, " GAP ", FileOut, " 2> ", FileErr);
