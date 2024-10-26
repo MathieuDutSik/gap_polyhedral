@@ -1,0 +1,10 @@
+#!/bin/sh
+# Mathieu Dutour Sikiric script for compiling the script.
+
+git clone --recursive https://github.com/MathieuDutSik/polyhedral_common.git
+
+cd polyhedral_common
+mkdir build
+cd build
+cmake ..
+make
