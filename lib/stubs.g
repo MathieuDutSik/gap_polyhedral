@@ -32,14 +32,14 @@ WriteMatrixFile:=function(eFile, eMat)
     CloseStream(output);
 end;
 
-ComputeIsotropicVector:=function(M)
+GenericExecutionFile:=function(f_write, input, TheProg)
     local FileInp, FileOut, FileErr;
-    FileInp:=Filename(POLYHEDRAL_tmpdir,"Isotropic.inp");
-    FileOut:=Filename(POLYHEDRAL_tmpdir,"Isotropic.out");
-    FileErr:=Filename(POLYHEDRAL_tmpdir,"Isotropic.err");
-    WriteMatrixFile(FileInp, M);
+    FileInp:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.inp");
+    FileOut:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.out");
+    FileErr:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.err");
+    f_write(FileInp, input);
     #
-    TheCommand:=Concatenation(FileLATT_FindIsotropic, " ", FileInp, " GAP ", FileOut, " 2> ", FileErr);
+    TheCommand:=Concatenation(TheProg, " ", FileInp, " GAP ", FileOut, " 2> ", FileErr);
     Exec(TheCommand);
     #
     TheRec:=ReadAsFunction(FileOut)();
@@ -49,5 +49,136 @@ ComputeIsotropicVector:=function(M)
     return TheRec;
 end;
 
-ComputeCanonicalForm:=function(M)
+GenericExecutionFileFile:=function(f_write1, input1, f_write2, input2, TheProg)
+    local FileInp, FileOut, FileErr;
+    FileIn1:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.in1");
+    FileIn2:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.in2");
+    FileOut:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.out");
+    FileErr:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.err");
+    f_write1(FileIn1, input1);
+    f_write2(FileIn2, input2);
+    #
+    TheCommand:=Concatenation(TheProg, " ", FileIn1, " ", FileIn2, " GAP ", FileOut, " 2> ", FileErr);
+    Exec(TheCommand);
+    #
+    TheRec:=ReadAsFunction(FileOut)();
+    RemoveFile(FileIn1);
+    RemoveFile(FileIn2);
+    RemoveFile(FileOut);
+    RemoveFile(FileErr);
+    return TheRec;
 end;
+
+GenericExecutionFileStrInput:=function(f_write, input, strInput, eProg)
+    local FileInp, FileOut, FileErr;
+    FileInp:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.inp");
+    FileOut:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.out");
+    FileErr:=Filename(POLYHEDRAL_tmpdir,"GenericExecSing.err");
+    f_write(FileInp, input);
+    #
+    TheCommand:=Concatenation(eProg, " ", FileInp, " ", strInput, " GAP ", FileOut, " 2> ", FileErr);
+    Exec(TheCommand);
+    #
+    TheRec:=ReadAsFunction(FileOut)();
+    RemoveFile(FileInp);
+    RemoveFile(FileOut);
+    RemoveFile(FileErr);
+    return TheRec;
+end;
+
+
+
+#
+# The calling function
+#
+
+ComputeIsotropicVector:=function(M)
+    local f_write;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    return GenericExecutionFile(f_write, M, FileLATT_FindIsotropic);
+end;
+
+
+ComputeCanonicalForm:=function(M)
+    local f_write;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    return GenericExecutionFile(f_write, M, FileLattCanonicalization);
+end;
+
+
+TestCopositivity:=function(M)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileCP_TestCopositivity, " gmp");
+    return GenericExecutionFile(f_write, M, eProg);
+end;
+
+
+TestCompletePositivity:=function(M)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileCP_TestCompletePositivity, " gmp");
+    return GenericExecutionFile(f_write, M, eProg);
+end;
+
+
+INDEF_FORM_AutomorphismGroup:=function(M)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileINDEF_FORM_AutomorphismGroup, " gmp");
+    return GenericExecutionFile(f_write, M, eProg);
+end;
+
+
+INDEF_FORM_TestEquivalence:=function(M1, M2)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileINDEF_FORM_TestEquivalence, " gmp");
+    return GenericExecutionFileFile(f_write, M1, f_write, M2, eProg);
+end;
+
+
+INDEF_FORM_GetOrbitRepresentative:=function(M, eNorm)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileINDEF_FORM_GetOrbitRepresentative, " gmp");
+    strInput:=String(eNorm);
+    return GenericExecutionFileStrInput(f_write, M, strInput, eProg);
+end;
+
+
+INDEF_FORM_GetOrbit_IsotropicKstuff:=function(M, k, nature)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileINDEF_FORM_GetOrbit_IsotropicKplane, " gmp");
+    strInput:=Concatenation(String(eNorm), " ", nature);
+    return GenericExecutionFileStrInput(f_write, M, strInput, eProg);
+end;
+
+
+INDEF_FORM_GetOrbit_IsotropicKplane:=function(M, k)
+    return INDEF_FORM_GetOrbit_IsotropicKstuff(M, k, "plane");
+end;
+
+
+INDEF_FORM_GetOrbit_IsotropicKflag:=function(M, k)
+    return INDEF_FORM_GetOrbit_IsotropicKstuff(M, k, "flag");
+end;
+
+
