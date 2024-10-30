@@ -2,10 +2,28 @@
 # Script for compiling the script.
 # Mathieu Dutour Sikiric
 
-git clone --recursive https://github.com/MathieuDutSik/polyhedral_common.git
+echo "Cloning the relevant repository"
+if [ ! -d "polyhedral_common" ]; then
+    git clone --recursive https://github.com/MathieuDutSik/polyhedral_common.git
+else
+    echo "Directory 'polyhedra_common' already exists. Skipping clone."
+fi
 
-cd polyhedral_common
-mkdir build
-cd build
+echo "Compiling the C++ code"
+mkdir -p polyhedral_common/build
+cd polyhedral_common/build
 cmake ..
 make
+cd ../..
+
+echo "Linking the binaries"
+GAPROOT="../.."
+GAPARCH="Unknown"
+. $GAPROOT/sysinfo.gap
+if test "x$GAParch" != "x"; then
+  GAPARCH=$GAParch
+fi
+echo "GAPARCH=GAPARCH"
+
+
+

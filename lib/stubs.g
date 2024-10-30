@@ -258,7 +258,7 @@ BindGlobal("LORENTZ_GetFundamentalDomain",function(LorMat)
     output:=OutputTextFile(FileNML, true);
     AppendTo(output, "&PROC\n");
     AppendTo(output, " FileLorMat = \"", FileMAT, "\"\n");
-    AppendTo(output, " OptionInitialVertex = \"vinberg\"\n");
+    AppendTo(output, " OptionInitialVertex = \"isotropic_vinberg\"\n");
     AppendTo(output, " OutFormat = \"GAP\"\n");
     AppendTo(output, " FileOut = \"", FileOUT, "\"\n");
     AppendTo(output, " OptionNorms = \"all\"\n");
