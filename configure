@@ -16,14 +16,22 @@ cmake ..
 make
 cd ../..
 
-echo "Linking the binaries"
+echo "Reading the GAParch"
 GAPROOT="../.."
 GAPARCH="Unknown"
 . $GAPROOT/sysinfo.gap
 if test "x$GAParch" != "x"; then
   GAPARCH=$GAParch
 fi
-echo "GAPARCH=GAPARCH"
+echo "GAPARCH=$GAPARCH"
 
-
-
+echo "Linking the binaries"
+source_dir="polyhedral_common/build"
+dest_dir="bin/$GAPARCH"
+mkdir -p $dest_dir
+binaries=("POLY_SerialDualDesc" "CP_TestCopositivity" "CP_TestCompletePositivity" "LORENTZ_FundDomain_AllcockEdgewalk" "POLY_FaceLatticeGen" "INDEF_FORM_AutomorphismGroup" "INDEF_FORM_TestEquivalence" "INDEF_FORM_GetOrbitRepresentative" "INDEF_FORM_GetOrbit_IsotropicKplane" "LATT_Canonicalize" "LATT_FindIsotropic")
+cd $dest_dir
+for bin in "${binaries[@]}"; do
+    ln -sf "../../$source_dir/$bin"
+done
+cd ../..
