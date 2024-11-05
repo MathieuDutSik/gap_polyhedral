@@ -124,20 +124,22 @@ end);
 #
 
 BindGlobal("ComputeIsotropicVector",function(M)
-    local f_write;
+    local f_write, eProg;
     f_write:=function(eFile, Minp)
         WriteMatrixFile(eFile, Minp);
     end;
-    return GenericExecutionFile(f_write, M, FileLATT_FindIsotropic);
+    eProg:=Concatenation(FileLATT_FindIsotropic, " rational");
+    return GenericExecutionFile(f_write, M, eProg);
 end);
 
 
 BindGlobal("ComputeCanonicalForm",function(M)
-    local f_write;
+    local f_write, eProg;
     f_write:=function(eFile, Minp)
         WriteMatrixFile(eFile, Minp);
     end;
-    return GenericExecutionFile(f_write, M, FileLATT_Canonicalize);
+    eProg:=Concatenation(FileLATT_Canonicalize, " gmp");
+    return GenericExecutionFile(f_write, M, eProg);
 end);
 
 
@@ -198,7 +200,7 @@ BindGlobal("INDEF_FORM_GetOrbit_IsotropicKstuff",function(M, k, nature)
         WriteMatrixFile(eFile, Minp);
     end;
     eProg:=Concatenation(FileINDEF_FORM_GetOrbit_IsotropicKplane, " gmp");
-    strInput:=Concatenation(String(eNorm), " ", nature);
+    strInput:=Concatenation(String(k), " ", nature);
     return GenericExecutionFileStrInput(f_write, M, strInput, eProg);
 end);
 
