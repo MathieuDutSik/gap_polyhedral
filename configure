@@ -29,7 +29,7 @@ echo "Linking the binaries"
 source_dir="polyhedral_common/build"
 dest_dir="bin/$GAPARCH"
 mkdir -p $dest_dir
-binaries=("POLY_SerialDualDesc" "CP_TestCopositivity" "CP_TestCompletePositivity" "LORENTZ_FundDomain_AllcockEdgewalk" "POLY_FaceLatticeGen" "INDEF_FORM_AutomorphismGroup" "INDEF_FORM_TestEquivalence" "INDEF_FORM_GetOrbitRepresentative" "INDEF_FORM_GetOrbit_IsotropicKplane" "LATT_Canonicalize" "LATT_FindIsotropic")
+binaries=("POLY_DirectSerialDualDesc" "CP_TestCopositivity" "CP_TestCompletePositivity" "LORENTZ_ReflectiveEdgewalk" "POLY_DirectFaceLattice" "INDEF_FORM_AutomorphismGroup" "INDEF_FORM_TestEquivalence" "INDEF_FORM_GetOrbitRepresentative" "INDEF_FORM_GetOrbit_IsotropicKplane" "LATT_Canonicalize" "LATT_FindIsotropic", "LATT_SerialComputeDelaunay", "LATT_SerialLattice_IsoDelaunayDomain")
 cd $dest_dir
 for bin in "${binaries[@]}"; do
     ln -sf "../../$source_dir/$bin"
