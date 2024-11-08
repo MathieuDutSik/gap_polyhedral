@@ -1,14 +1,6 @@
-LoadPackage( "grape" );
+LoadPackage( "gap_polyhedral" );
 
-if IsBound(GAPInfo.SystemEnvironment.GRAPE_NAUTY) then
-    if GAPInfo.SystemEnvironment.GRAPE_NAUTY = "true" then
-        GRAPE_NAUTY := true;
-    elif GAPInfo.SystemEnvironment.GRAPE_NAUTY = "false" then
-        GRAPE_NAUTY := false;
-    fi;
-fi;
-
-TestDirectory(DirectoriesPackageLibrary( "grape", "tst" ),
+TestDirectory(DirectoriesPackageLibrary( "gap_polyhedral", "tst" ),
   rec(exitGAP     := true,
       testOptions := rec(compareFunction := "uptowhitespace") ) );
 
