@@ -35,6 +35,17 @@ BindGlobal("WriteMatrixFile",function(eFile, eMat)
     CloseStream(output);
 end);
 
+BindGlobal("WriteListMatrixFile",function(eFile, ListMat)
+    local output;
+    output:=OutputTextFile(eFile, true);
+    AppendTo(output, Length(ListMat), "\n");
+    for eMat in ListMat
+    do
+        CPP_WriteMatrix(output, eMat);
+    od;
+    CloseStream(output);
+end);
+
 BindGlobal("CPP_WriteGroup",function(output, n, GRP)
   local ListGen, eGen, i, j;
   ListGen:=GeneratorsOfGroup(GRP);
@@ -271,4 +282,24 @@ BindGlobal("POLY_FaceLattice",function(EXT, GRP, LevSearch)
     eProg:=Concatenation(FilePOLY_DirectFaceLattice, " rational");
     strInput:=String(LevSearch);
     return GenericExecutionFileFile(f_write1, EXT, f_write2, GRP, strInput, eProg);
+end);
+
+
+BindGlobal("LATT_ComputeDelaunay",function(M)
+    local f_write, eProg;
+    f_write:=function(eFile, Minp)
+        WriteMatrixFile(eFile, Minp);
+    end;
+    eProg:=Concatenation(FileLATT_SerialComputeDelaunay, " gmp");
+    return GenericExecutionFile(f_write, M, eProg);
+end);
+
+
+BindGlobal("LATT_IsoDelaunayDomains",function(ListM)
+    local f_write, eProg;
+    f_write:=function(eFile, ListMinp)
+        WriteListMatrixFile(eFile, ListMinp);
+    end;
+    eProg:=Concatenation(FileLATT_SerialLattice_IsoDelaunayDomain, " gmp");
+    return GenericExecutionFile(f_write, ListM, eProg);
 end);
